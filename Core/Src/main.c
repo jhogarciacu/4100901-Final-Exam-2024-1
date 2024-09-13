@@ -100,12 +100,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		return;
 	}
 	uint8_t key_pressed = keypad_scan(GPIO_Pin);
-	if (key_pressed != 0xFF) {
-		ring_buffer_write(&keypad_rb, keypad_data);
-		if (ring_buffer_is_full(&keypad_rb) != 0) {
-
-		}
-	}
+//	if (key_pressed != 0xFF) {
+//		ring_buffer_write(&keypad_rb, keypad_data);
+//		if (ring_buffer_is_full(&keypad_rb) != 0) {
+//
+//		}
+//	}
 }
 /* USER CODE END 0 */
 
@@ -158,6 +158,21 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if (key_pressed != 0xFF){
+	  			if(key_pressed = '*'){
+	  				ring_buffer_reset(&keypad_rb);
+	  				}
+	  			if(key_pressed = '#'){
+	  				ring_buffer_reset(&usart2_rb);
+	  			}
+	  			else {
+	  				ring_buffer_write(&keypad_rb, key_pressed);
+	  			}
+	  			key_pressed = 0xFF;
+	  		}
+
+
+
   }
   /* USER CODE END 3 */
 }

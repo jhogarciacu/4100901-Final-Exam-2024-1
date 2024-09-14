@@ -56,7 +56,9 @@ uint8_t keypad_data = 0xFF;
 uint8_t keypad_buffer[KEYPAD_RB_LEN];
 ring_buffer_t keypad_rb;
 
-#define USART2_RB_LEN 4
+uint8_t key_pressed;
+
+#define USART2_RB_LEN 6
 uint8_t usart2_data = 0xFF;
 uint8_t usart2_buffer[USART2_RB_LEN];
 ring_buffer_t usart2_rb;
@@ -96,10 +98,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == B1_Pin) {
-
+		uint8_t sume = 1;
 		return;
 	}
 	uint8_t key_pressed = keypad_scan(GPIO_Pin);
+
+
 //	if (key_pressed != 0xFF) {
 //		ring_buffer_write(&keypad_rb, keypad_data);
 //		if (ring_buffer_is_full(&keypad_rb) != 0) {
@@ -147,6 +151,10 @@ int main(void)
   ssd1306_WriteString("Welcome!", Font_7x10, White);
   ssd1306_UpdateScreen();
 
+  //inicializamos los bufer
+  ring_buffer_init(&keypad_rb, keypad_buffer, KEYPAD_RB_LEN);
+  ring_buffer_init(&usart2_rb, usart2_buffer, USART2_RB_LEN);
+
   HAL_UART_Receive_IT(&huart2, &usart2_data, 1);
   /* USER CODE END 2 */
 
@@ -166,10 +174,22 @@ int main(void)
 	  				ring_buffer_reset(&usart2_rb);
 	  			}
 	  			else {
-	  				ring_buffer_write(&keypad_rb, key_pressed);
+	  				if(ring_buffer_is_full(&keypad_rb) == 0 ){
+	  					ring_buffer_write(&keypad_rb, key_pressed);
+	  				}
+	  				else{
+	  					ssd1306_Fill(Black);
+	  					ssd1306_SetCursor(10, 20);
+	  					ssd1306_WriteString("bufer lleno, oprima el boton", Font_7x10, White);
+	  					ssd1306_UpdateScreen();
+	  				}
 	  			}
 	  			key_pressed = 0xFF;
 	  		}
+
+
+
+
 
 
 

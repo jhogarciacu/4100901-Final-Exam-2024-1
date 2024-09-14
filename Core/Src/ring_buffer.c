@@ -110,4 +110,37 @@ uint8_t ring_buffer_read(ring_buffer_t *rb, uint8_t *data) // 0x20
 	}
 	return 0; // buffer vacio
 }
+uint8_t ring_buffer_get_last(ring_buffer_t *rb, uint8_t *last_digit) {
+    uint8_t size = ring_buffer_size(rb);
 
+    // Verifica si hay al menos 1 dato en el buffer
+    if (size == 0) {
+        return 0; // No hay suficientes datos
+    }
+
+    // Encuentra el índice del último elemento almacenado
+    int16_t last_index = (rb->head == 0) ? (rb->capacity - 1) : (rb->head - 1);
+
+    // Extrae el último dígito
+    *last_digit = rb->buffer[last_index];
+
+    return 1; // Se ha extraído el dato exitosamente
+}
+
+uint8_t ring_buffer_get_second_last(ring_buffer_t *rb, uint8_t *second_last_digit) {
+    uint8_t size = ring_buffer_size(rb);
+
+    // Verifica si hay al menos 2 datos en el buffer
+    if (size < 2) {
+        return 0; // No hay suficientes datos
+    }
+
+    // Encuentra el índice del penúltimo elemento almacenado
+    int16_t second_last_index = (rb->head == 0) ? (rb->capacity - 2) :
+                                (rb->head == 1) ? (rb->capacity - 1) : (rb->head - 2);
+
+    // Extrae el penúltimo dígito
+    *second_last_digit = rb->buffer[second_last_index];
+
+    return 1; // Se ha extraído el dato exitosamente
+}

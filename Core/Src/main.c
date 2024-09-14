@@ -57,6 +57,7 @@ uint8_t keypad_buffer[KEYPAD_RB_LEN];
 ring_buffer_t keypad_rb;
 
 uint8_t key_pressed;
+uint8_t sume;
 
 #define USART2_RB_LEN 6
 uint8_t usart2_data = 0xFF;
@@ -98,10 +99,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == B1_Pin) {
-		uint8_t sume = 1;
-		return;
+		sume = 1;
 	}
-	uint8_t key_pressed = keypad_scan(GPIO_Pin);
+	key_pressed = keypad_scan(GPIO_Pin);
 
 
 //	if (key_pressed != 0xFF) {
@@ -186,6 +186,9 @@ int main(void)
 	  			}
 	  			key_pressed = 0xFF;
 	  		}
+	  if(sume == 1){
+
+	  }
 
 
 

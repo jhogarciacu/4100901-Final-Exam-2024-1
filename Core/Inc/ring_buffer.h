@@ -25,6 +25,8 @@ void ring_buffer_reset(ring_buffer_t *rb);
 uint8_t ring_buffer_size(ring_buffer_t *rb);
 uint8_t ring_buffer_is_full(ring_buffer_t *rb);
 uint8_t ring_buffer_is_empty(ring_buffer_t *rb);
+uint8_t ring_buffer_get_last(ring_buffer_t *rb, uint8_t *last_digit);
+uint8_t ring_buffer_get_second_last(ring_buffer_t *rb, uint8_t *second_last_digit);
 
 void ring_buffer_write(ring_buffer_t *rb, uint8_t data);
 uint8_t ring_buffer_read(ring_buffer_t *rb, uint8_t *byte);

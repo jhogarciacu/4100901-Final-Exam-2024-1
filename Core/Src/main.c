@@ -62,6 +62,7 @@ uint8_t last_digit;
 uint8_t last_digit_2;
 uint8_t second_last_digit;
 uint8_t second_last_digit2;
+uint8_t byte;
 
 
 #define USART2_RB_LEN 6
@@ -109,12 +110,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	key_pressed = keypad_scan(GPIO_Pin);
 
 
-//	if (key_pressed != 0xFF) {
+	if (key_pressed != 0xFF) {
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(10, 20);
+	ssd1306_WriteString(&key_pressed, Font_7x10, White);
+	ssd1306_UpdateScreen();
 //		ring_buffer_write(&keypad_rb, keypad_data);
 //		if (ring_buffer_is_full(&keypad_rb) != 0) {
 //
 //		}
-//	}
+	}
 }
 /* USER CODE END 0 */
 
@@ -191,8 +196,22 @@ int main(void)
 	  			}
 	  			key_pressed = 0xFF;
 	  		}
-	  if(sume == 1){
+	  if (ring_buffer_read(&usart2_rb, &byte) != 0) {
+		  ssd1306_Fill(Black);
+		  ssd1306_SetCursor(10, 20);
+		  ssd1306_WriteString(&byte, Font_7x10, White);
+		  ssd1306_UpdateScreen();
 
+	  	}
+
+	  if(sume == 1){
+		  uint8_t sum_buffer_keypad = ring_buffer_sum(&keypad_rb);
+		  uint8_t sum_buffer_usart = ring_buffer_sum(&usart2_rb);
+		  uint8_t sum_total = sum_buffer_keypad + sum_buffer_usart;
+		  ssd1306_Fill(Black);
+		  ssd1306_SetCursor(10, 20);
+		  ssd1306_WriteString(&sum_total , Font_7x10, White);
+		  ssd1306_UpdateScreen();
 
 	  }
 

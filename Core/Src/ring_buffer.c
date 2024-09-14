@@ -144,3 +144,23 @@ uint8_t ring_buffer_get_second_last(ring_buffer_t *rb, uint8_t *second_last_digi
 
     return 1; // Se ha extraído el dato exitosamente
 }
+
+uint16_t ring_buffer_sum(ring_buffer_t *rb) {
+    uint16_t sum = 0;
+    uint8_t index = rb->tail;
+
+    // Recorre el buffer circular
+    while (index != rb->head || rb->is_full) {
+        sum += rb->buffer[index];
+
+        // Avanza al siguiente elemento
+        index = (index + 1) % rb->capacity;
+
+        // Si el buffer está lleno, solo se hace un recorrido completo
+        if (index == rb->tail && rb->is_full) {
+            break;
+        }
+    }
+
+    return sum;
+}

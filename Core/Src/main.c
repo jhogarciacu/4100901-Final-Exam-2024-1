@@ -58,6 +58,11 @@ ring_buffer_t keypad_rb;
 
 uint8_t key_pressed;
 uint8_t sume;
+uint8_t last_digit;
+uint8_t last_digit_2;
+uint8_t second_last_digit;
+uint8_t second_last_digit2;
+
 
 #define USART2_RB_LEN 6
 uint8_t usart2_data = 0xFF;
@@ -187,6 +192,7 @@ int main(void)
 	  			key_pressed = 0xFF;
 	  		}
 	  if(sume == 1){
+
 
 	  }
 
